@@ -1,0 +1,13 @@
+/* Query 1
+This query reports the total amount and quantity of all shipped orderlines given by a specific time period. Additionally it informs about the average amount and quantity plus the total count of all these orderlines ordered by the individual orderline number.
+*/
+SELECT ol.ol_number,
+       SUM(ol.ol_quantity) AS sum_qty,
+       SUM(ol.ol_amount) AS sum_amount,
+       AVG(ol.ol_quantity) AS avg_qty,
+       AVG(ol.ol_amount) AS avg_amount,
+       COUNT(*) AS count_order
+FROM   orders o, o.o_orderline ol
+WHERE  ol.ol_delivery_d /*+ skip-index */ > '2014-07-01 00:00:00'
+GROUP BY ol.ol_number
+ORDER BY ol.ol_number;

@@ -1,0 +1,16 @@
+/*
+Query 3
+Unshipped orders with the highest price amount for a customer will be listed within a given state and with orders newer than a specific timestamp. This list will be sorted by the descending amount.
+*/
+SELECT o.o_id, o.o_w_id, o.o_d_id, SUM(ol.ol_amount) AS revenue, o.o_entry_d
+FROM   customer c, neworder no, orders o, o.o_orderline ol
+WHERE  c.c_state LIKE 'A%'
+  AND c.c_id = o.o_c_id
+  AND c.c_w_id = o.o_w_id
+  AND c.c_d_id = o.o_d_id
+  AND no.no_w_id = o.o_w_id
+  AND no.no_d_id = o.o_d_id
+  AND no.no_o_id = o.o_id
+  AND o.o_entry_d /*+ skip-index */ < '2017-03-15 00:00:00.000000'
+GROUP BY o.o_id, o.o_w_id, o.o_d_id, o.o_entry_d
+ORDER BY revenue DESC, o.o_entry_d;

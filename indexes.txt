@@ -1,0 +1,9 @@
+CREATE INDEX customer_c_balance ON customer(c_balance:DOUBLE);    (for Q22)
+CREATE INDEX orders_entry_d ON orders(o_entry_d:STRING);    (for Q4, Q5, Q10, Q21, Q22)
+		
+--Array indexes
+
+CREATE INDEX orderline_i_id ON orders(UNNEST o_orderline SELECT ol_i_id:BIGINT)   EXCLUDE UNKNOWN KEY;   (for Q8)
+CREATE INDEX orderline_delivery_d ON orders(UNNEST o_orderline SELECT ol_delivery_d:STRING) EXCLUDE UNKNOWN KEY;	 (for Q6, Q7, Q12, Q14, Q15, Q20)
+
+--Had to use skip-index (before CBO) for Q1, Q3, Q8.

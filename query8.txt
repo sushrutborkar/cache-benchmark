@@ -1,0 +1,24 @@
+/*
+Query 8
+This query lists the market share of a given nation for customers from a certain region in which kinds of items are "produced".
+*/
+SELECT DATE_PART_STR(o.o_entry_d, 'year') AS l_year,
+       ROUND((SUM(CASE WHEN n2.n_name = 'Germany' THEN ol.ol_amount ELSE 0 END) / SUM(ol.ol_amount)),2) AS mkt_share
+FROM   item i, supplier su, stock s, orders o, o.o_orderline ol, customer c, nation n1, nation n2, region r
+WHERE i.i_id = s.s_i_id
+  AND ol.ol_i_id = s.s_i_id
+  AND ol.ol_supply_w_id = s.s_w_id
+  AND s.s_w_id * s.s_i_id MOD 10000 = su.su_suppkey
+  AND c.c_id = o.o_c_id
+  AND c.c_w_id = o.o_w_id
+  AND c.c_d_id = o.o_d_id
+  AND n1.n_nationkey = string_to_codepoint(c.c_state)[0]
+  AND n1.n_regionkey = r.r_regionkey
+  AND ol.ol_i_id < 1000
+  AND r.r_name = 'Europe'
+  AND su.su_nationkey = n2.n_nationkey
+  AND o.o_entry_d /*+ skip-index */ BETWEEN '2017-01-01 00:00:00.000000' AND '2018-12-31 00:00:00.000000'
+  AND i.i_data LIKE '%b'
+  AND i.i_id = ol.ol_i_id
+GROUP BY DATE_PART_STR(o.o_entry_d, 'year')
+ORDER BY l_year;

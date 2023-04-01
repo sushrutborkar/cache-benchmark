@@ -1,0 +1,17 @@
+/*
+Query 11
+Most important items (items which are often involved in orders and therefore often bought by customers) supplied by supplier of a given nation.
+*/
+SELECT s.s_i_id, SUM(s.s_order_cnt) as ordercount
+FROM   stock s,  supplier su, nation n 
+WHERE  s.s_w_id * s.s_i_id MOD 10000 = su.su_suppkey
+  AND  su.su_nationkey = n.n_nationkey
+  AND  n.n_name = 'Germany'
+GROUP BY s.s_i_id
+HAVING SUM(s.s_order_cnt) >
+         (SELECT VALUE SUM(s1.s_order_cnt) * 0.00005
+          FROM stock s1,  supplier su1, nation n1
+          WHERE s1.s_w_id * s1.s_i_id MOD 10000 = su1.su_suppkey
+            AND su1.su_nationkey = n1.n_nationkey
+            AND n1.n_name = 'Germany')[0]
+ORDER BY ordercount DESC;

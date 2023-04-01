@@ -1,0 +1,20 @@
+/*
+Query 5
+Query result for getting information about achieved revenues of nations within a given region. All nations are sorted by the total amount of revenue gained since the given date.
+*/
+SELECT	 n.n_name,
+	 ROUND(SUM(ol.ol_amount), 2) AS revenue
+FROM	 customer c, orders o, o.o_orderline ol, stock s, supplier su, nation n, region r
+WHERE	 c.c_id = o.o_c_id
+  AND    c.c_w_id = o.o_w_id
+  AND    c.c_d_id = o.o_d_id
+  AND    o.o_w_id = s.s_w_id
+  AND    ol.ol_i_id = s.s_i_id
+  AND    s.s_w_id * s.s_i_id MOD 10000 = su.su_suppkey
+  AND    string_to_codepoint(c.c_state)[0] = su.n_nationkey
+  AND    su.su_nationkey = n.n_nationkey
+  AND    n.n_regionkey = r.r_regionkey
+  AND    r.r_name = 'Asia'
+  AND    o.o_entry_d >= '2016-01-01 00:00:00.000000' AND o.o_entry_d < '2017-01-01 00:00:00.000000'
+GROUP BY n.n_name
+ORDER BY revenue DESC;

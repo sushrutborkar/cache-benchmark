@@ -1,0 +1,22 @@
+/*
+Query 2
+Query for listing suppliers and their distributed items having the lowest stock level for a certain item and certain region.
+*/
+SELECT su.su_suppkey, su.su_name, n.n_name, i.i_id, i.i_name, su.su_address, su.su_phone, su.su_comment
+FROM   item i,  supplier su, stock s, nation n, region r,
+        (SELECT s1.s_i_id as m_i_id, MIN(s1.s_quantity) AS m_s_quantity
+         FROM stock s1, supplier su1, nation n1, region r1
+	 WHERE s1.s_w_id*s1.s_i_id MOD 10000 = su1.su_suppkey
+	   AND su1.su_nationkey=n1.n_nationkey
+	   AND n1.n_regionkey=r1.r_regionkey
+	   AND r1.r_name LIKE 'Europ%'
+	 GROUP BY s1.s_i_id) m
+ WHERE i.i_id = s.s_i_id
+   AND s.s_w_id * s.s_i_id MOD 10000 = su.su_suppkey
+   AND su.su_nationkey = n.n_nationkey
+   AND n.n_regionkey = r.r_regionkey
+   AND i.i_data LIKE '%b'
+   AND r.r_name LIKE 'Europ%'
+   AND i.i_id=m.m_i_id
+   AND s.s_quantity = m.m_s_quantity
+ORDER BY n.n_name, su.su_name, i.i_id limit 100;
