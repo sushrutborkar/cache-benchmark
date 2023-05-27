@@ -9,7 +9,7 @@ FROM	 supplier su, orders o1, o1.o_orderline ol1, stock s, nation n
 WHERE	 o1.o_w_id = s.s_w_id
   AND ol1.ol_i_id = s.s_i_id
   AND s.s_w_id * s.s_i_id MOD 10000 = su.su_suppkey
-  AND ol1.ol_delivery_d > date_add_str(o1.o_entry_d, 150, 'day')
+  AND parse_datetime(ol1.ol_delivery_d, "Y-M-D h:m:s") > parse_datetime(o1.o_entry_d, "Y-M-D h:m:s") + duration("P150D")
   AND o1.o_entry_d between '2017-12-01 00:00:00' and '2017-12-31 00:00:00'
   AND NOT EXISTS (SELECT *
 	          FROM	orders o2, o2.o_orderline ol2
@@ -31,7 +31,7 @@ LIMIT 100;
              WHERE o1.o_w_id = s.s_w_id
                AND ol1.ol_i_id = s.s_i_id
                AND s.s_w_id * s.s_i_id MOD 10000 = su.su_suppkey
-               AND ol1.ol_delivery_d > date_add_str(o1.o_entry_d, 150, 'day')
+               AND parse_datetime(ol1.ol_delivery_d, "Y-M-D h:m:s") > parse_datetime(o1.o_entry_d, "Y-M-D h:m:s") + duration("P150D")
                AND o1.o_entry_d between '2017-12-01 00:00:00' and '2017-12-31 00:00:00'
                AND su.su_nationkey = n.n_nationkey
                AND n.n_name = 'Peru') x

@@ -4,7 +4,7 @@ Query for showing the bi-directional trade volume between two given nations sort
 */
 SELECT	 su.su_nationkey as supp_nation,
 	 SUBSTR1(c.c_state,1,1) as cust_nation,
-	 DATE_PART_STR(o.o_entry_d, 'year') AS l_year,
+	 get_year(o.o_entry_d) AS l_year,
 	 ROUND(SUM(ol.ol_amount),2) AS revenue
 FROM	 supplier su, stock s, orders o, o.o_orderline ol, customer c, nation n1, nation n2
 WHERE	 ol.ol_supply_w_id = s.s_w_id
@@ -21,5 +21,5 @@ WHERE	 ol.ol_supply_w_id = s.s_w_id
 	   (n1.n_name = 'Cambodia' and n2.n_name = 'Germany')
 	 )
   AND    ol.ol_delivery_d BETWEEN '2017-01-01 00:00:00.000000' AND '2018-12-31 00:00:00.000000'
-GROUP BY su.su_nationkey, SUBSTR1(c.c_state,1,1), DATE_PART_STR(o.o_entry_d, 'year')
+GROUP BY su.su_nationkey, SUBSTR1(c.c_state,1,1), get_year(o.o_entry_d)
 ORDER BY su.su_nationkey, cust_nation, l_year;

@@ -2,7 +2,7 @@
 Query 9
 This query describes how much profit has been made on a selection of items for each nation and each year. The result list will be sorted by the name of the nation and the financial year.
 */
-SELECT	 n.n_name, DATE_PART_STR(o.o_entry_d, 'year') AS l_year, SUM(ol.ol_amount) AS sum_profit
+SELECT	 n.n_name, get_year(o.o_entry_d) AS l_year, SUM(ol.ol_amount) AS sum_profit
 FROM	 item i, stock s, supplier su, orders o, o.o_orderline ol, nation n
 WHERE	 ol.ol_i_id = s.s_i_id
   AND    ol.ol_supply_w_id = s.s_w_id
@@ -10,5 +10,5 @@ WHERE	 ol.ol_i_id = s.s_i_id
   AND    ol.ol_i_id = i.i_id
   AND    su.su_nationkey = n.n_nationkey
   AND    i.i_data like '%bb'
-GROUP BY n.n_name, DATE_PART_STR(o.o_entry_d, 'year')
+GROUP BY n.n_name, get_year(o.o_entry_d)
 ORDER BY n.n_name, l_year DESC;
