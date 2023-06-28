@@ -1,0 +1,8 @@
+USE test;
+
+SELECT R.id
+FROM R
+WHERE R.f1 /*+ use-index (ind1) */ = {a}
+  AND R.f2 /*+ use-index (ind2) */ = {b}
+  AND R.f3 /*+ use-index (ind3) */ = {c}
+  AND R.f4 /*+ use-index (ind4) */ = {d};

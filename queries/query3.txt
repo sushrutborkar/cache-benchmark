@@ -11,6 +11,6 @@ WHERE  c.c_state LIKE 'A%'
   AND no.no_w_id = o.o_w_id
   AND no.no_d_id = o.o_d_id
   AND no.no_o_id = o.o_id
-  AND o.o_entry_d /*+ skip-index */ < '2017-03-15 00:00:00.000000'
+  AND o.o_entry_d < '2017-03-15 00:00:00.000000'
 GROUP BY o.o_id, o.o_w_id, o.o_d_id, o.o_entry_d
 ORDER BY revenue DESC, o.o_entry_d;

@@ -17,7 +17,7 @@ WHERE i.i_id = s.s_i_id
   AND ol.ol_i_id < 1000
   AND r.r_name = 'Europe'
   AND su.su_nationkey = n2.n_nationkey
-  AND o.o_entry_d /*+ skip-index */ BETWEEN '2017-01-01 00:00:00.000000' AND '2018-12-31 00:00:00.000000'
+  AND o.o_entry_d BETWEEN '2017-01-01 00:00:00.000000' AND '2018-12-31 00:00:00.000000'
   AND i.i_data LIKE '%b'
   AND i.i_id = ol.ol_i_id
 GROUP BY get_year(o.o_entry_d)

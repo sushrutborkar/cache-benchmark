@@ -1,0 +1,6 @@
+USE test;
+
+SELECT *
+FROM R1, R2, R3
+WHERE R1.fk = R2.id
+  AND R2.fk = R3.id;

@@ -1,0 +1,44 @@
+DROP DATAVERSE test IF EXISTS;
+CREATE DATAVERSE test;
+USE test;
+
+CREATE TYPE testType AS CLOSED {
+    id: bigint,
+    f1: int,
+    f2: int,
+    f3: int,
+    f4: int,
+    st: string,
+    fk: bigint
+};
+
+CREATE DATASET R(testType) PRIMARY KEY id;
+CREATE DATASET R1(testType) PRIMARY KEY id;
+CREATE DATASET R2(testType) PRIMARY KEY id;
+CREATE DATASET R3(testType) PRIMARY KEY id;
+CREATE DATASET R4(testType) PRIMARY KEY id;
+CREATE DATASET R5(testType) PRIMARY KEY id;
+CREATE DATASET R6(testType) PRIMARY KEY id;
+
+LOAD DATASET R  USING localfs (("path"="127.0.0.1:///home/sushrut/cache-benchmark/exp_data/R.json"), ("format"="json"));
+LOAD DATASET R1 USING localfs (("path"="127.0.0.1:///home/sushrut/cache-benchmark/exp_data/R1.json"), ("format"="json"));
+LOAD DATASET R2 USING localfs (("path"="127.0.0.1:///home/sushrut/cache-benchmark/exp_data/R2.json"), ("format"="json"));
+LOAD DATASET R3 USING localfs (("path"="127.0.0.1:///home/sushrut/cache-benchmark/exp_data/R3.json"), ("format"="json"));
+LOAD DATASET R4 USING localfs (("path"="127.0.0.1:///home/sushrut/cache-benchmark/exp_data/R4.json"), ("format"="json"));
+LOAD DATASET R5 USING localfs (("path"="127.0.0.1:///home/sushrut/cache-benchmark/exp_data/R5.json"), ("format"="json"));
+LOAD DATASET R6 USING localfs (("path"="127.0.0.1:///home/sushrut/cache-benchmark/exp_data/R6.json"), ("format"="json"));
+
+CREATE INDEX i1 ON R1(fk);
+CREATE INDEX i2 ON R2(fk);
+CREATE INDEX i3 ON R3(fk);
+CREATE INDEX i4 ON R4(fk);
+CREATE INDEX i5 ON R5(fk);
+CREATE INDEX i6 ON R6(fk);
+
+ANALYZE DATASET R;
+ANALYZE DATASET R1;
+ANALYZE DATASET R2;
+ANALYZE DATASET R3;
+ANALYZE DATASET R4;
+ANALYZE DATASET R5;
+ANALYZE DATASET R6;

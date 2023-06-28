@@ -1,0 +1,5 @@
+USE test;
+
+SELECT *
+FROM R1, R2
+WHERE R1.fk = R2.id;

@@ -1,0 +1,8 @@
+USE test;
+
+SELECT *
+FROM R1, R2, R3, R4, R5
+WHERE R1.fk = R2.id
+  AND R2.fk = R3.id
+  AND R3.fk = R4.id
+  AND R4.fk = R5.id;

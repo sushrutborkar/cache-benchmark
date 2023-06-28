@@ -1,0 +1,5 @@
+USE test;
+
+SELECT R1.id
+FROM R1
+WHERE R1.fk = {a};

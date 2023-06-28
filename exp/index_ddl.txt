@@ -1,0 +1,5 @@
+USE test;
+
+CREATE INDEX ind{i} ON R(f{i});
+ANALYZE DATASET R;
+

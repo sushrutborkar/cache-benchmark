@@ -8,6 +8,6 @@ SELECT ol.ol_number,
        AVG(ol.ol_amount) AS avg_amount,
        COUNT(*) AS count_order
 FROM   orders o, o.o_orderline ol
-WHERE  ol.ol_delivery_d /*+ skip-index */ > '2014-07-01 00:00:00'
+WHERE  ol.ol_delivery_d > '2014-07-01 00:00:00'
 GROUP BY ol.ol_number
 ORDER BY ol.ol_number;

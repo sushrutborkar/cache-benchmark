@@ -12,14 +12,13 @@ def runBenchmark(dataSize, numRuns):
             f = open("queries/query" + str(i) + ".txt", "r")
             query = f.read()
             f.close()
-            if run % 2 == 0:
-                query = 'SET `compiler.querycache.bypass` "true";\n' + query
+            bypass_cache = (run % 2 == 0)
             query = f'USE w_{dataSize};\n' + query
             no_comment_query_string = re.sub(r'//.*?(\r\n?|\n)|/\*.*?\*/', '', query, flags=re.S)
             compressed_query_string = ' '.join(no_comment_query_string.split())
-            data = {'statement':compressed_query_string}
+            data = {'statement':compressed_query_string, 'bypass_cache':bypass_cache}
             
-            if i not in [2,3,8,9]:
+            if i not in [2,3,8,9,16]:
                 start = time.time()
                 resp = requests.post('http://localhost:19002/query/service', data=data)
                 end = time.time()
@@ -43,9 +42,9 @@ def parseCompileTime(resp):
 
 
 if __name__ == "__main__":
-    queryNumbers = np.array([i for i in range(1,23) if i not in [2,3,8,9]])
-    for dataSize in [1, ]:
-        times = runBenchmark(dataSize, 6)[:, queryNumbers-1, 2:].round(5)
+    queryNumbers = np.array([i for i in range(1,23) if i not in [2,3,8,9,16]])
+    for dataSize in [1,4,16]:
+        times = runBenchmark(dataSize, 12)[:, queryNumbers-1, 2:].round(5)
         np.save('results/none'+str(dataSize), times[:, :, ::2])
         np.save('results/with'+str(dataSize), times[:, :, 1::2])
         print()
